@@ -323,8 +323,8 @@ open class TagListView: UIView {
     }
     
     @discardableResult
-    open func addTag(_ title: String, accesoryView: UIView?) -> TagView {
-        return addTagView(createNewTagView(title, accessoryView: accesoryView))
+    open func addTag(_ title: String, accessoryView: UIView?) -> TagView {
+        return addTagView(createNewTagView(title, accessoryView: accessoryView))
     }
     
     @discardableResult
