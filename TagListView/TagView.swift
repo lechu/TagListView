@@ -11,6 +11,40 @@ import UIKit
 @IBDesignable
 open class TagView: UIButton {
 
+    // varible for right accessory view
+    fileprivate var _accessoryView: UIView?
+    // seter getter
+    var accessoryView: UIView? {
+        get {
+            return _accessoryView
+        }
+        
+        set (value) {
+            // change only for new value
+            if value != _accessoryView {
+                // remove previous view
+                if _accessoryView != nil {
+                    _accessoryView?.removeFromSuperview()
+                    _accessoryView = nil
+                }
+                
+                _accessoryView = value
+                
+                if _accessoryView != nil {
+                    addSubview(_accessoryView!)
+                }
+                
+                updateRightInsets()
+            }
+        }
+    }
+    
+    func layoutAccesoryView() {
+        if accessoryView != nil {
+            updateRightInsets()
+        }
+    }
+
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
             layer.cornerRadius = cornerRadius
@@ -184,15 +218,24 @@ open class TagView: UIButton {
         if enableRemoveButton {
             size.width += removeButtonIconSize + paddingX
         }
+        else if accessoryView != nil {
+            size.width += accessoryView!.bounds.width + paddingX
+        }
         return size
     }
     
     private func updateRightInsets() {
         if enableRemoveButton {
             titleEdgeInsets.right = paddingX  + removeButtonIconSize + paddingX
+            accessoryView?.isHidden = true
         }
         else {
-            titleEdgeInsets.right = paddingX
+            if accessoryView != nil {
+                titleEdgeInsets.right = paddingX  + accessoryView!.bounds.width
+            }
+            else {
+                titleEdgeInsets.right = paddingX
+            }
         }
     }
     
@@ -203,6 +246,13 @@ open class TagView: UIButton {
             removeButton.frame.origin.x = self.frame.width - removeButton.frame.width
             removeButton.frame.size.height = self.frame.height
             removeButton.frame.origin.y = 0
+            accessoryView?.isHidden = true
+        }
+        else if accessoryView != nil {
+            accessoryView!.frame.origin.x = self.frame.width - accessoryView!.bounds.width
+            accessoryView!.frame.size.height = self.frame.height
+            accessoryView!.frame.origin.y = 0
+            accessoryView!.isHidden = false
         }
     }
 }

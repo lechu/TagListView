@@ -32,6 +32,20 @@ tagListView.removeTag("meow") // all tags with title “meow” will be removed
 tagListView.removeAllTags()
 ```
 
+Support for right accessory view
+
+```swift
+
+let label = UILabel()
+label.text = "accessor label"
+label.backgroundColor = UIColor.white
+label.sizeToFit()
+label.frame = CGRect(x: 0, y: 0, width: label.frame.width + 8, height: label.frame.height)
+label.textAlignment = .center
+
+tagListView.addTag("TagListView", accesoryView: label)
+```
+
 You can implement `TagListViewDelegate` to receive tag pressed event:
 
 ```swift

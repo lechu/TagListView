@@ -42,7 +42,16 @@ class ViewController: UIViewController, TagListViewDelegate {
         biggerTagListView.shadowOpacity = 0.4
         biggerTagListView.shadowColor = UIColor.black
         biggerTagListView.shadowOffset = CGSize(width: 1, height: 1)
-        biggerTagListView.addTag("Inboard")
+        
+        let label1 = UILabel()
+        label1.text = "accessor label"
+        label1.backgroundColor = UIColor.white
+        label1.sizeToFit()
+        label1.frame = CGRect(x: 0, y: 0, width: label1.frame.width + 8, height: label1.frame.height)
+        label1.textAlignment = .center
+        
+        
+        biggerTagListView.addTag("Inboard", accesoryView: label1)
         biggerTagListView.addTag("Pomotodo")
         biggerTagListView.addTag("Halo Word")
         biggerTagListView.alignment = .center
