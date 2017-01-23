@@ -13,8 +13,6 @@ open class TagView: UIButton {
 
     // varible for right accessory view
     fileprivate var _accessoryView: UIView?
-    // shadow layer
-    var shadowLayer: UIImageView?
     // seter getter
     var accessoryView: UIView? {
         get {
@@ -40,6 +38,18 @@ open class TagView: UIButton {
             }
         }
     }
+    // shadow layer
+    var _shadowLayer: UIView?
+    var shadowLayer: UIView? {
+        get {
+            return _shadowLayer
+        }
+
+        set (value) {
+            _shadowLayer = value
+        }
+    }
+
     
     func layoutAccesoryView() {
         if accessoryView != nil {
