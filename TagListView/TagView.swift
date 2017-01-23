@@ -40,7 +40,7 @@ open class TagView: UIButton {
     }
     // shadow layer
     var _shadowLayer: UIView?
-    var shadowLayer: UIView? {
+    public var shadowLayer: UIView? {
         get {
             return _shadowLayer
         }
