@@ -13,6 +13,8 @@ open class TagView: UIButton {
 
     // varible for right accessory view
     fileprivate var _accessoryView: UIView?
+    // shadow layer
+    var shadowLayer: UIImageView?
     // seter getter
     var accessoryView: UIView? {
         get {
