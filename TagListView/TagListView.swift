@@ -354,6 +354,10 @@ open class TagListView: UIView {
     @discardableResult
     open func addTagView(_ tagView: TagView) -> TagView {
         tagViews.append(tagView)
+        
+        tagView.addTarget(self, action: #selector(tagPressed(_:)), for: .touchUpInside)
+        tagView.removeButton.addTarget(self, action: #selector(removeButtonPressed(_:)), for: .touchUpInside)
+        
         tagBackgroundViews.append(UIView(frame: tagView.bounds))
         rearrangeViews()
         
