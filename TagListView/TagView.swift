@@ -11,52 +11,6 @@ import UIKit
 @IBDesignable
 open class TagView: UIButton {
 
-    // varible for right accessory view
-    fileprivate var _accessoryView: UIView?
-    // seter getter
-    var accessoryView: UIView? {
-        get {
-            return _accessoryView
-        }
-        
-        set (value) {
-            // change only for new value
-            if value != _accessoryView {
-                // remove previous view
-                if _accessoryView != nil {
-                    _accessoryView?.removeFromSuperview()
-                    _accessoryView = nil
-                }
-                
-                _accessoryView = value
-                
-                if _accessoryView != nil {
-                    addSubview(_accessoryView!)
-                }
-                
-                updateRightInsets()
-            }
-        }
-    }
-    // shadow layer
-    var _shadowLayer: UIView?
-    public var shadowLayer: UIView? {
-        get {
-            return _shadowLayer
-        }
-
-        set (value) {
-            _shadowLayer = value
-        }
-    }
-
-    
-    func layoutAccesoryView() {
-        if accessoryView != nil {
-            updateRightInsets()
-        }
-    }
-
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
             layer.cornerRadius = cornerRadius
@@ -83,6 +37,11 @@ open class TagView: UIButton {
     @IBInspectable open var selectedTextColor: UIColor = UIColor.white {
         didSet {
             reloadStyles()
+        }
+    }
+    @IBInspectable open var titleLineBreakMode: NSLineBreakMode = .byTruncatingMiddle {
+        didSet {
+            titleLabel?.lineBreakMode = titleLineBreakMode
         }
     }
     @IBInspectable open var paddingY: CGFloat = 2 {
@@ -122,7 +81,7 @@ open class TagView: UIButton {
         }
     }
     
-    var textFont: UIFont = UIFont.systemFont(ofSize: 12) {
+    @IBInspectable open var textFont: UIFont = .systemFont(ofSize: 12) {
         didSet {
             titleLabel?.font = textFont
         }
@@ -139,12 +98,12 @@ open class TagView: UIButton {
         else if isSelected {
             backgroundColor = selectedBackgroundColor ?? tagBackgroundColor
             layer.borderColor = selectedBorderColor?.cgColor ?? borderColor?.cgColor
-            setTitleColor(selectedTextColor, for: UIControlState())
+            setTitleColor(selectedTextColor, for: UIControl.State())
         }
         else {
             backgroundColor = tagBackgroundColor
             layer.borderColor = borderColor?.cgColor
-            setTitleColor(textColor, for: UIControlState())
+            setTitleColor(textColor, for: UIControl.State())
         }
     }
     
@@ -203,12 +162,14 @@ open class TagView: UIButton {
     
     public init(title: String) {
         super.init(frame: CGRect.zero)
-        setTitle(title, for: UIControlState())
+        setTitle(title, for: UIControl.State())
         
         setupView()
     }
     
     private func setupView() {
+        titleLabel?.lineBreakMode = titleLineBreakMode
+
         frame.size = intrinsicContentSize
         addSubview(removeButton)
         removeButton.tagView = self
@@ -217,21 +178,21 @@ open class TagView: UIButton {
         self.addGestureRecognizer(longPress)
     }
     
-    func longPress() {
+    @objc func longPress() {
         onLongPress?(self)
     }
     
     // MARK: - layout
 
     override open var intrinsicContentSize: CGSize {
-        var size = titleLabel?.text?.size(attributes: [NSFontAttributeName: textFont]) ?? CGSize.zero
+        var size = titleLabel?.text?.size(withAttributes: [NSAttributedString.Key.font: textFont]) ?? CGSize.zero
         size.height = textFont.pointSize + paddingY * 2
         size.width += paddingX * 2
+        if size.width < size.height {
+            size.width = size.height
+        }
         if enableRemoveButton {
             size.width += removeButtonIconSize + paddingX
-        }
-        else if accessoryView != nil {
-            size.width += accessoryView!.bounds.width + paddingX
         }
         return size
     }
@@ -239,15 +200,9 @@ open class TagView: UIButton {
     private func updateRightInsets() {
         if enableRemoveButton {
             titleEdgeInsets.right = paddingX  + removeButtonIconSize + paddingX
-            accessoryView?.isHidden = true
         }
         else {
-            if accessoryView != nil {
-                titleEdgeInsets.right = paddingX  + accessoryView!.bounds.width
-            }
-            else {
-                titleEdgeInsets.right = paddingX
-            }
+            titleEdgeInsets.right = paddingX
         }
     }
     
@@ -258,13 +213,16 @@ open class TagView: UIButton {
             removeButton.frame.origin.x = self.frame.width - removeButton.frame.width
             removeButton.frame.size.height = self.frame.height
             removeButton.frame.origin.y = 0
-            accessoryView?.isHidden = true
-        }
-        else if accessoryView != nil {
-            accessoryView!.frame.origin.x = self.frame.width - accessoryView!.bounds.width
-            accessoryView!.frame.size.height = self.frame.height
-            accessoryView!.frame.origin.y = 0
-            accessoryView!.isHidden = false
         }
     }
 }
+
+/// Swift < 4.2 support
+#if !(swift(>=4.2))
+private extension NSAttributedString {
+    typealias Key = NSAttributedStringKey
+}
+private extension UIControl {
+    typealias State = UIControlState
+}
+#endif

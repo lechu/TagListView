@@ -37,27 +37,18 @@ class ViewController: UIViewController, TagListViewDelegate {
         tagListView.insertTag("This should be the third tag", at: 2)
         
         biggerTagListView.delegate = self
-        biggerTagListView.textFont = UIFont.systemFont(ofSize: 15)
+        biggerTagListView.textFont = .systemFont(ofSize: 15)
         biggerTagListView.shadowRadius = 2
         biggerTagListView.shadowOpacity = 0.4
         biggerTagListView.shadowColor = UIColor.black
         biggerTagListView.shadowOffset = CGSize(width: 1, height: 1)
-        
-        let label1 = UILabel()
-        label1.text = "accessor label"
-        label1.backgroundColor = UIColor.white
-        label1.sizeToFit()
-        label1.frame = CGRect(x: 0, y: 0, width: label1.frame.width + 8, height: label1.frame.height)
-        label1.textAlignment = .center
-        
-        
-        biggerTagListView.addTag("Inboard", accesoryView: label1)
+        biggerTagListView.addTag("Inboard")
         biggerTagListView.addTag("Pomotodo")
         biggerTagListView.addTag("Halo Word")
         biggerTagListView.alignment = .center
         
         biggestTagListView.delegate = self
-        biggestTagListView.textFont = UIFont.systemFont(ofSize: 24)
+        biggestTagListView.textFont = .systemFont(ofSize: 24)
         // it is also possible to add all tags in one go
         biggestTagListView.addTags(["all", "your", "tag", "are", "belong", "to", "us"])
         biggestTagListView.alignment = .right
